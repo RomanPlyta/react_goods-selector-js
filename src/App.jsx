@@ -16,22 +16,27 @@ export const goods = [
 ];
 
 export const App = () => {
-  const [value, setValue] = useState('No goods');
-  const [activeGood, setActiveGood] = useState(null);
+  const [value, setValue] = useState('Jam is');
+  const [activeGood, setActiveGood] = useState('Jam');
+  const [selectedGood, setSelectedGood] = useState(true);
+  // const [activeButton, setButton] = useState(false);
 
   return (
     <main className="section container">
       <h1 className="title is-flex is-align-items-center">
         {value} selected
-        <button
-          data-cy="ClearButton"
-          type="button"
-          className="delete ml-3"
-          onClick={() => {
-            setValue('No goods');
-            setActiveGood(null);
-          }}
-        />
+        {selectedGood && (
+          <button
+            data-cy="ClearButton"
+            type="button"
+            className="delete ml-3"
+            onClick={() => {
+              setValue('No goods');
+              setActiveGood(null);
+              setSelectedGood(false);
+            }}
+          />
+        )}
       </h1>
 
       <table className="table">
@@ -51,8 +56,15 @@ export const App = () => {
                     type="button"
                     className={`button ${isActive ? 'is-info' : ''}`}
                     onClick={() => {
-                      setValue(`${good} is`);
-                      setActiveGood(good);
+                      if (isActive) {
+                        setValue('No goods');
+                        setActiveGood(null);
+                        setSelectedGood(false);
+                      } else {
+                        setValue(`${good} is`);
+                        setActiveGood(good);
+                        setSelectedGood(true);
+                      }
                     }}
                   >
                     {isActive ? '-' : '+'}
