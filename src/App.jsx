@@ -16,25 +16,31 @@ export const goods = [
 ];
 
 export const App = () => {
-  const [value, setValue] = useState('Jam is');
-  const [activeGood, setActiveGood] = useState('Jam');
-  const [selectedGood, setSelectedGood] = useState(true);
-  // const [activeButton, setButton] = useState(false);
+  const [selectedGood, setSelectedGood] = useState('Jam');
+
+  const isGoodSelected = selectedGood !== '';
+  const title = isGoodSelected
+    ? `${selectedGood} is selected`
+    : 'No goods selected';
+
+  const handleClearSelection = () => {
+    setSelectedGood('');
+  };
+
+  const handleToggleGood = good => {
+    setSelectedGood(prev => (prev === good ? '' : good));
+  };
 
   return (
     <main className="section container">
       <h1 className="title is-flex is-align-items-center">
-        {value} selected
-        {selectedGood && (
+        {title}
+        {isGoodSelected && (
           <button
             data-cy="ClearButton"
             type="button"
             className="delete ml-3"
-            onClick={() => {
-              setValue('No goods');
-              setActiveGood(null);
-              setSelectedGood(false);
-            }}
+            onClick={handleClearSelection}
           />
         )}
       </h1>
@@ -42,7 +48,7 @@ export const App = () => {
       <table className="table">
         <tbody>
           {goods.map(good => {
-            const isActive = activeGood === good;
+            const isActive = selectedGood === good;
 
             return (
               <tr
@@ -55,17 +61,7 @@ export const App = () => {
                     data-cy="AddButton"
                     type="button"
                     className={`button ${isActive ? 'is-info' : ''}`}
-                    onClick={() => {
-                      if (isActive) {
-                        setValue('No goods');
-                        setActiveGood(null);
-                        setSelectedGood(false);
-                      } else {
-                        setValue(`${good} is`);
-                        setActiveGood(good);
-                        setSelectedGood(true);
-                      }
-                    }}
+                    onClick={() => handleToggleGood(good)}
                   >
                     {isActive ? '-' : '+'}
                   </button>
